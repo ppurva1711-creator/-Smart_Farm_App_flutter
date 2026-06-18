@@ -1,9 +1,9 @@
+// lib/features/dashboard/widgets/schedule_card.dart
 import 'package:flutter/material.dart';
 
 import '../../../core/services/firebase_service.dart';
 
 class ScheduleCard extends StatefulWidget {
-
   final Map schedules;
 
   const ScheduleCard({
@@ -12,368 +12,141 @@ class ScheduleCard extends StatefulWidget {
   });
 
   @override
-  State<ScheduleCard> createState() =>
-      _ScheduleCardState();
+  State<ScheduleCard> createState() => _ScheduleCardState();
 }
 
-class _ScheduleCardState
-    extends State<ScheduleCard> {
-
-  final FirebaseService firebaseService =
-      FirebaseService();
+class _ScheduleCardState extends State<ScheduleCard> {
+  final FirebaseService firebaseService = FirebaseService();
 
   TimeOfDay? startTime;
   TimeOfDay? endTime;
 
-  Future<void> pickStartTime() async {
-
-    final picked =
-        await showTimePicker(
-      context: context,
-      initialTime:
-          TimeOfDay.now(),
-    );
-
-    if (picked != null) {
-
-      setState(() {
-        startTime = picked;
-      });
-    }
+  Future<void> _pickStartTime() async {
+    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (picked != null) setState(() => startTime = picked);
   }
 
-  Future<void> pickEndTime() async {
-
-    final picked =
-        await showTimePicker(
-      context: context,
-      initialTime:
-          TimeOfDay.now(),
-    );
-
-    if (picked != null) {
-
-      setState(() {
-        endTime = picked;
-      });
-    }
+  Future<void> _pickEndTime() async {
+    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (picked != null) setState(() => endTime = picked);
   }
 
-  void showAddScheduleDialog() {
+  Future<void> _showAddDialog() async {
+    startTime = null;
+    endTime = null;
 
-    showDialog(
-
+    await showDialog(
       context: context,
-
-      builder: (_) {
-
-        return AlertDialog(
-
-          shape:
-              RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(24),
-          ),
-
-          title: const Text(
-            "Add Schedule",
-          ),
-
-          content: Column(
-
-            mainAxisSize:
-                MainAxisSize.min,
-
-            children: [
-
-              ElevatedButton(
-
-                onPressed:
-                    pickStartTime,
-
-                child: Text(
-                  startTime == null
-                      ? "Select Start Time"
-                      : startTime!
-                          .format(
-                            context,
-                          ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              ElevatedButton(
-
-                onPressed:
-                    pickEndTime,
-
-                child: Text(
-                  endTime == null
-                      ? "Select End Time"
-                      : endTime!
-                          .format(
-                            context,
-                          ),
-                ),
-              ),
-            ],
-          ),
-
-          actions: [
-
-            TextButton(
-
-              onPressed: () {
-                Navigator.pop(context);
-              },
-
-              child: const Text(
-                "Cancel",
-              ),
-            ),
-
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        title: const Text('Add Schedule'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             ElevatedButton(
-
-              onPressed: () async {
-
-                if (startTime != null &&
-                    endTime != null) {
-
-                  await firebaseService
-                      .addSchedule(
-
-                    start:
-                        startTime!.format(
-                          context,
-                        ),
-
-                    end:
-                        endTime!.format(
-                          context,
-                        ),
-                  );
-
-                  Navigator.pop(context);
-
-                  setState(() {});
-                }
-              },
-
-              child: const Text(
-                "Save",
-              ),
+              onPressed: _pickStartTime,
+              child: Text(startTime == null ? 'Select Start Time' : startTime!.format(context)),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _pickEndTime,
+              child: Text(endTime == null ? 'Select End Time' : endTime!.format(context)),
             ),
           ],
-        );
-      },
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          ElevatedButton(
+            onPressed: () async {
+              if (startTime == null || endTime == null) return;
+              await firebaseService.addSchedule(
+                start: startTime!.format(context),
+                end: endTime!.format(context),
+              );
+              if (mounted) Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final entries = widget.schedules.entries.toList();
 
     return Container(
-
-      padding: const EdgeInsets.all(18),
-
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE6D8C8)),
       ),
-
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Row(
-            mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-
             children: [
-
-              Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-
-                children: const [
-
-                  Text(
-                    "Pump Schedule",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight:
-                          FontWeight.bold,
-                    ),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "Automatic timing control",
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+              const Icon(Icons.schedule_rounded, color: Colors.deepPurple),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  'Pump Schedule',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
               ),
-
-              ElevatedButton.icon(
-
-                onPressed:
-                    showAddScheduleDialog,
-
-                icon: const Icon(
-                  Icons.add,
+              ElevatedButton(
+                onPressed: _showAddDialog,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white,
                 ),
-
-                label: const Text(
-                  "Add",
-                ),
+                child: const Text('Add'),
               ),
             ],
           ),
-
-          const SizedBox(height: 20),
-
-          ...widget.schedules.entries
-              .map((entry) {
-
-            final scheduleId =
-                entry.key;
-
-            final schedule =
-                entry.value;
+          const SizedBox(height: 10),
+          if (entries.isEmpty)
+            const Text('No schedules yet.', style: TextStyle(color: Color(0xFF6C7278))),
+          ...entries.map((entry) {
+            final scheduleId = entry.key.toString();
+            final schedule = Map<dynamic, dynamic>.from(entry.value is Map ? entry.value as Map : {});
+            final enabled = schedule['enabled'] == true;
+            final start = schedule['start']?.toString() ?? '--:--';
+            final end = schedule['end']?.toString() ?? '--:--';
 
             return Container(
-
-              margin:
-                  const EdgeInsets.only(
-                bottom: 16,
-              ),
-
-              padding:
-                  const EdgeInsets.all(16),
-
+              margin: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-
-                color: schedule[
-                        "enabled"]
-                    ? Colors.purple.shade50
-                    : Colors.grey.shade200,
-
-                borderRadius:
-                    BorderRadius.circular(
-                  20,
-                ),
+                color: enabled ? const Color(0xFFF2ECFF) : const Color(0xFFF2F3F5),
+                borderRadius: BorderRadius.circular(12),
               ),
-
-              child: Column(
-
+              child: Row(
                 children: [
-
-                  Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment
-                            .spaceBetween,
-
-                    children: [
-
-                      Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
-
-                        children: [
-
-                          Text(
-                            "${schedule["start"]} → ${schedule["end"]}",
-
-                            style:
-                                const TextStyle(
-                              fontWeight:
-                                  FontWeight
-                                      .bold,
-
-                              color:
-                                  Colors.purple,
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 4,
-                          ),
-
-                          Text(
-                            schedule[
-                                    "enabled"]
-                                ? "Active"
-                                : "Disabled",
-                          ),
-                        ],
-                      ),
-
-                      Switch(
-
-                        value:
-                            schedule[
-                                "enabled"],
-
-                        onChanged:
-                            (value) async {
-
-                          await firebaseService
-                              .toggleSchedule(
-
-                            scheduleId:
-                                scheduleId,
-
-                            enabled:
-                                value,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Align(
-
-                    alignment:
-                        Alignment.centerRight,
-
-                    child: TextButton.icon(
-
-                      onPressed: () async {
-
-                        await firebaseService
-                            .deleteSchedule(
-                          scheduleId,
-                        );
-                      },
-
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-
-                      label: const Text(
-                        "Delete",
-
-                        style: TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
+                  Expanded(
+                    child: Text(
+                      '$start → $end',
+                      style: const TextStyle(fontWeight: FontWeight.w700),
                     ),
+                  ),
+                  Switch(
+                    value: enabled,
+                    onChanged: (value) async {
+                      await firebaseService.toggleSchedule(scheduleId: scheduleId, enabled: value);
+                    },
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      await firebaseService.deleteSchedule(scheduleId);
+                    },
+                    icon: const Icon(Icons.delete_outline_rounded, color: Colors.red),
                   ),
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

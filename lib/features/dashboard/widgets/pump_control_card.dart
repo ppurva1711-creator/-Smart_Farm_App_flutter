@@ -1,184 +1,106 @@
+// lib/features/dashboard/widgets/pump_control_card.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/firebase_service.dart';
 
-class PumpControlCard extends ConsumerStatefulWidget {
-  const PumpControlCard({super.key});
+class PumpControlCard extends StatefulWidget {
+  final bool currentDesiredState;
+
+  const PumpControlCard({
+    super.key,
+    required this.currentDesiredState,
+  });
 
   @override
-  ConsumerState<PumpControlCard> createState() =>
-      _PumpControlCardState();
+  State<PumpControlCard> createState() => _PumpControlCardState();
 }
 
-class _PumpControlCardState
-    extends ConsumerState<PumpControlCard> {
+class _PumpControlCardState extends State<PumpControlCard> {
+  final FirebaseService firebaseService = FirebaseService();
+  bool loading = false;
 
-  bool isPumpOn = false;
+  Future<void> _setMotor(bool value) async {
+    if (loading) return;
+    setState(() => loading = true);
+    try {
+      await firebaseService.setMotor(value);
+    } finally {
+      if (mounted) setState(() => loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    final firebaseService =
-        FirebaseService();
+    final isOn = widget.currentDesiredState;
 
     return Container(
-
-      padding: const EdgeInsets.all(20),
-
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5EBDD),
-        borderRadius: BorderRadius.circular(24),
+        color: const Color(0xFFE7DCCB),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFD9C9B3)),
       ),
-
       child: Column(
-
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-
         children: [
-
           Row(
             children: [
-
               Container(
-                padding: const EdgeInsets.all(12),
-
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius:
-                      BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-
-                child: Icon(
-                  Icons.power_settings_new,
-                  size: 30,
-                  color: isPumpOn
-                      ? Colors.green
-                      : Colors.grey,
+                child: Icon(Icons.power_settings_new_rounded, color: isOn ? Colors.blue : Colors.grey),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Water Pump',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF4B2E1D)),
+                    ),
+                    Text(isOn ? 'Pump ON 💧' : 'Pump OFF', style: const TextStyle(color: Color(0xFF5C6A78))),
+                  ],
                 ),
               ),
-
-              const SizedBox(width: 16),
-
-              Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-
-                children: [
-
-                  const Text(
-                    "Water Pump",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight:
-                          FontWeight.bold,
-                    ),
-                  ),
-
-                  Text(
-                    isPumpOn
-                        ? "Pump ON"
-                        : "Pump OFF",
-
-                    style: TextStyle(
-                      color: isPumpOn
-                          ? Colors.green
-                          : Colors.grey,
-                    ),
-                  ),
-                ],
+              Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: isOn ? Colors.blue : Colors.grey.shade400,
+                  shape: BoxShape.circle,
+                ),
               ),
             ],
           ),
-
-          const SizedBox(height: 24),
-
+          const SizedBox(height: 14),
           Row(
             children: [
-
               Expanded(
                 child: ElevatedButton(
-
-                  onPressed: () async {
-
-                    setState(() {
-                      isPumpOn = true;
-                    });
-
-                    await firebaseService
-                        .setMotor(true);
-                  },
-
-                  style:
-                      ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.green,
-
-                    foregroundColor:
-                        Colors.white,
-
-                    padding:
-                        const EdgeInsets.symmetric(
-                      vertical: 18,
-                    ),
-
-                    shape:
-                        RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(
-                        16,
-                      ),
-                    ),
+                  onPressed: isOn || loading ? null : () => _setMotor(true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2E7D32),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-
-                  child: const Text(
-                    "Turn ON",
-                  ),
+                  child: const Text('Turn ON', style: TextStyle(fontWeight: FontWeight.w700)),
                 ),
               ),
-
-              const SizedBox(width: 16),
-
+              const SizedBox(width: 10),
               Expanded(
                 child: OutlinedButton(
-
-                  onPressed: () async {
-
-                    setState(() {
-                      isPumpOn = false;
-                    });
-
-                    await firebaseService
-                        .setMotor(false);
-                  },
-
-                  style:
-                      OutlinedButton.styleFrom(
-                    foregroundColor:
-                        Colors.red,
-
-                    side: const BorderSide(
-                      color: Colors.red,
-                    ),
-
-                    padding:
-                        const EdgeInsets.symmetric(
-                      vertical: 18,
-                    ),
-
-                    shape:
-                        RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(
-                        16,
-                      ),
-                    ),
+                  onPressed: !isOn || loading ? null : () => _setMotor(false),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.red,
+                    side: const BorderSide(color: Color(0xFFFF8A80)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-
-                  child: const Text(
-                    "Turn OFF",
-                  ),
+                  child: Text(loading ? 'Syncing...' : 'Turn OFF', style: const TextStyle(fontWeight: FontWeight.w700)),
                 ),
               ),
             ],
