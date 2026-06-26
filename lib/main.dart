@@ -8,20 +8,11 @@ import 'router/app_router.dart';
 import 'core/theme/app_theme.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options:
-        DefaultFirebaseOptions
-            .currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(
-    const ProviderScope(
-      child: SmartFarmApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: SmartFarmApp()));
 }
 
 class SmartFarmApp extends StatelessWidget {
@@ -29,19 +20,14 @@ class SmartFarmApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp.router(
-
-      debugShowCheckedModeBanner:
-          false,
+      debugShowCheckedModeBanner: false,
 
       title: 'Smart Farm',
 
-      theme:
-          AppTheme.lightTheme,
+      theme: AppTheme.lightTheme,
 
-      routerConfig:
-          appRouter,
+      routerConfig: appRouter,
     );
   }
 }

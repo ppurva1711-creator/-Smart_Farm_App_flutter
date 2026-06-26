@@ -16,10 +16,8 @@ class StatusProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Expanded(
       child: Container(
-
         padding: const EdgeInsets.all(16),
 
         decoration: BoxDecoration(
@@ -28,21 +26,14 @@ class StatusProgressCard extends StatelessWidget {
         ),
 
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
             Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: [
-
-                Icon(
-                  icon,
-                  color: Colors.white,
-                ),
+                Icon(icon, color: Colors.white),
 
                 Text(
                   "$value%",
@@ -57,28 +48,19 @@ class StatusProgressCard extends StatelessWidget {
             const SizedBox(height: 20),
 
             ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10),
 
               child: LinearProgressIndicator(
                 value: value / 100,
                 minHeight: 8,
                 backgroundColor: Colors.white30,
-                valueColor:
-                    AlwaysStoppedAnimation(
-                  progressColor,
-                ),
+                valueColor: AlwaysStoppedAnimation(progressColor),
               ),
             ),
 
             const SizedBox(height: 10),
 
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
+            Text(title, style: const TextStyle(color: Colors.white)),
           ],
         ),
       ),

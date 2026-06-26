@@ -4,13 +4,10 @@ class MotorControlCard extends StatefulWidget {
   const MotorControlCard({super.key});
 
   @override
-  State<MotorControlCard> createState() =>
-      _MotorControlCardState();
+  State<MotorControlCard> createState() => _MotorControlCardState();
 }
 
-class _MotorControlCardState
-    extends State<MotorControlCard> {
-
+class _MotorControlCardState extends State<MotorControlCard> {
   bool isMotorOn = false;
 
   @override
@@ -23,31 +20,23 @@ class _MotorControlCardState
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
             const Text(
               "Water Motor",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
 
             Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: [
-
                 Text(
                   isMotorOn ? "ON" : "OFF",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: isMotorOn
-                        ? Colors.green
-                        : Colors.red,
+                    color: isMotorOn ? Colors.green : Colors.red,
                   ),
                 ),
 

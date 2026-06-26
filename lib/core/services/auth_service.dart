@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class AuthService {
-  AuthService({
-    FirebaseAuth? auth,
-    FirebaseDatabase? database,
-  })  : _auth = auth ?? FirebaseAuth.instance,
-        _database = database ?? FirebaseDatabase.instance;
+  AuthService({FirebaseAuth? auth, FirebaseDatabase? database})
+    : _auth = auth ?? FirebaseAuth.instance,
+      _database = database ?? FirebaseDatabase.instance;
 
   final FirebaseAuth _auth;
   final FirebaseDatabase _database;

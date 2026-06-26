@@ -28,7 +28,11 @@ class DashboardHeader extends StatelessWidget {
           colors: [Color(0xFFC4763F), Color(0xFFD98A54)],
         ),
         boxShadow: const [
-          BoxShadow(color: Color(0x33222222), blurRadius: 10, offset: Offset(0, 4)),
+          BoxShadow(
+            color: Color(0x33222222),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
         ],
       ),
       child: Column(
@@ -36,7 +40,11 @@ class DashboardHeader extends StatelessWidget {
         children: [
           const Text(
             'Welcome, Farmer',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
           Text(
             'Smart Irrigation Dashboard • $operatingMode / $powerMode',
@@ -91,7 +99,11 @@ class DashboardHeader extends StatelessWidget {
               const Spacer(),
               Text(
                 '$value%',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 11),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
+                ),
               ),
             ],
           ),
@@ -106,7 +118,10 @@ class DashboardHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text(label, style: const TextStyle(color: Colors.white, fontSize: 10)),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white, fontSize: 10),
+          ),
         ],
       ),
     );

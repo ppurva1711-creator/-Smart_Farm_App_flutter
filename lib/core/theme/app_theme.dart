@@ -4,9 +4,7 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
 
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.green,
-    ),
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
 
     scaffoldBackgroundColor: const Color(0xFFF4F7F5),
 
@@ -18,9 +16,7 @@ class AppTheme {
 
     cardTheme: CardThemeData(
       elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
   );
 }

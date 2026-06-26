@@ -50,9 +50,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         return;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.toString())));
     } finally {
       if (mounted) {
         setState(() {
@@ -87,7 +87,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      isRegistering ? 'Create Farmer Login' : 'Smart Farm Login',
+                      isRegistering
+                          ? 'Create Farmer Login'
+                          : 'Smart Farm Login',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),

@@ -34,7 +34,7 @@ final persistedSelectedDeviceProvider = FutureProvider<String?>((ref) {
   return ref.watch(firebaseServiceProvider).selectedDeviceId();
 });
 
- final assignedDevicesProvider = StreamProvider<DatabaseEvent>((ref) {
+final assignedDevicesProvider = StreamProvider<DatabaseEvent>((ref) {
   final user = ref.watch(authStateProvider).valueOrNull;
 
   if (user == null) {

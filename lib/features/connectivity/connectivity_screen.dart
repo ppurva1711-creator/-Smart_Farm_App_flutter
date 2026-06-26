@@ -18,8 +18,9 @@ class ConnectivityScreen extends ConsumerStatefulWidget {
 
 class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
   static final Guid serviceUuid = Guid('4fafc201-1fb5-459e-8fcc-c5c9c331914b');
-  static final Guid provisioningCharacteristicUuid =
-      Guid('beb5483e-36e1-4688-b7f5-ea07361b26a8');
+  static final Guid provisioningCharacteristicUuid = Guid(
+    'beb5483e-36e1-4688-b7f5-ea07361b26a8',
+  );
 
   final ssidController = TextEditingController();
   final passwordController = TextEditingController();
@@ -28,7 +29,8 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
 
   ScanResult? selectedResult;
   bool provisioning = false;
-  String status = 'Scan for SmartFarm_BLE, choose the ESP32, then send Wi-Fi credentials.';
+  String status =
+      'Scan for SmartFarm_BLE, choose the ESP32, then send Wi-Fi credentials.';
 
   @override
   void dispose() {
@@ -83,11 +85,17 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
     final fallbackDeviceId = manualDeviceIdController.text.trim().isNotEmpty
         ? manualDeviceIdController.text.trim()
         : selectedResult?.device.remoteId.str ?? '';
-    final normalizedDeviceId = firebaseService.normalizeDeviceId(fallbackDeviceId);
+    final normalizedDeviceId = firebaseService.normalizeDeviceId(
+      fallbackDeviceId,
+    );
 
     if (normalizedDeviceId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select a BLE device or enter the ESP32 MAC/device ID.')),
+        const SnackBar(
+          content: Text(
+            'Select a BLE device or enter the ESP32 MAC/device ID.',
+          ),
+        ),
       );
       return;
     }
@@ -105,11 +113,14 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
         final services = await device.discoverServices();
         final provisioningService = services.firstWhere(
           (service) => service.uuid == serviceUuid,
-          orElse: () => throw StateError('SmartFarm provisioning BLE service not found.'),
+          orElse: () =>
+              throw StateError('SmartFarm provisioning BLE service not found.'),
         );
         final characteristic = provisioningService.characteristics.firstWhere(
           (item) => item.uuid == provisioningCharacteristicUuid,
-          orElse: () => throw StateError('SmartFarm provisioning BLE characteristic not found.'),
+          orElse: () => throw StateError(
+            'SmartFarm provisioning BLE characteristic not found.',
+          ),
         );
 
         final payload = jsonEncode({
@@ -138,7 +149,8 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
       ref.read(selectedDeviceIdProvider.notifier).state = normalizedDeviceId;
 
       setState(() {
-        status = 'Provisioned $normalizedDeviceId. ESP32 can now use Wi-Fi + Firebase.';
+        status =
+            'Provisioned $normalizedDeviceId. ESP32 can now use Wi-Fi + Firebase.';
       });
     } catch (error) {
       setState(() {
@@ -158,8 +170,10 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
     final authState = ref.watch(authStateProvider);
 
     return authState.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (error, _) => Scaffold(body: Center(child: Text(error.toString()))),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, _) =>
+          Scaffold(body: Center(child: Text(error.toString()))),
       data: (user) {
         if (user == null) {
           return const LoginScreen();
@@ -187,7 +201,10 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
                     children: [
                       const Text(
                         'BLE Provisioning → Wi-Fi Operations',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -227,7 +244,8 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
                 controller: manualDeviceIdController,
                 decoration: const InputDecoration(
                   labelText: 'Device ID override (MAC, optional)',
-                  helperText: 'Use AA:BB:CC:11:22:33 if BLE remote ID is not the ESP32 Wi-Fi MAC.',
+                  helperText:
+                      'Use AA:BB:CC:11:22:33 if BLE remote ID is not the ESP32 Wi-Fi MAC.',
                   prefixIcon: Icon(Icons.memory),
                 ),
               ),
@@ -248,26 +266,30 @@ class _ConnectivityScreenState extends ConsumerState<ConnectivityScreen> {
                     return const Text('No SmartFarm_BLE devices found yet.');
                   }
 
-                  return Column(
-                    children: results.map((result) {
-                      final name = result.advertisementData.advName.isNotEmpty
-                          ? result.advertisementData.advName
-                          : result.device.platformName;
-                      return RadioListTile<ScanResult>(
-                        value: result,
-                        groupValue: selectedResult,
-                        onChanged: provisioning
-                            ? null
-                            : (value) {
-                                setState(() {
-                                  selectedResult = value;
-                                  manualDeviceIdController.text = value?.device.remoteId.str ?? '';
-                                });
-                              },
-                        title: Text(name.isEmpty ? 'SmartFarm ESP32' : name),
-                        subtitle: Text(result.device.remoteId.str),
-                      );
-                    }).toList(),
+                   return RadioGroup<ScanResult>(
+                    groupValue: selectedResult,
+                    onChanged: (value) {
+                      if (provisioning || value == null) {
+                        return;
+                      }
+
+                      setState(() {
+                        selectedResult = value;
+                        manualDeviceIdController.text = value.device.remoteId.str;
+                      });
+                    },
+                    child: Column(
+                      children: results.map((result) {
+                        final name = result.advertisementData.advName.isNotEmpty
+                            ? result.advertisementData.advName
+                            : result.device.platformName;
+                        return RadioListTile<ScanResult>(
+                          value: result,
+                          title: Text(name.isEmpty ? 'SmartFarm ESP32' : name),
+                          subtitle: Text(result.device.remoteId.str),
+                        );
+                      }).toList(),
+                    ),
                   );
                 },
               ),

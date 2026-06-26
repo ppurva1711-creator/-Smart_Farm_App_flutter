@@ -11,14 +11,12 @@ void main() {
     expect(app, isA<Widget>());
   });
 
-  testWidgets('ProviderScope + MaterialApp renders', (WidgetTester tester) async {
+  testWidgets('ProviderScope + MaterialApp renders', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(
-          home: Scaffold(
-            body: Text('Smart Farm'),
-          ),
-        ),
+        child: MaterialApp(home: Scaffold(body: Text('Smart Farm'))),
       ),
     );
 

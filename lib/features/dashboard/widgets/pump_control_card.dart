@@ -5,10 +5,12 @@ import '../../../core/services/firebase_service.dart';
 
 class PumpControlCard extends StatefulWidget {
   final bool currentDesiredState;
+  final String deviceId;
 
   const PumpControlCard({
     super.key,
     required this.currentDesiredState,
+    required this.deviceId,
   });
 
   @override
@@ -23,7 +25,7 @@ class _PumpControlCardState extends State<PumpControlCard> {
     if (loading) return;
     setState(() => loading = true);
     try {
-      await firebaseService.setMotor(value);
+      await firebaseService.setMotor(deviceId: widget.deviceId, value: value);
     } finally {
       if (mounted) setState(() => loading = false);
     }
@@ -50,7 +52,10 @@ class _PumpControlCardState extends State<PumpControlCard> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(Icons.power_settings_new_rounded, color: isOn ? Colors.blue : Colors.grey),
+                child: Icon(
+                  Icons.power_settings_new_rounded,
+                  color: isOn ? Colors.blue : Colors.grey,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -59,9 +64,16 @@ class _PumpControlCardState extends State<PumpControlCard> {
                   children: [
                     const Text(
                       'Water Pump',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF4B2E1D)),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Color(0xFF4B2E1D),
+                      ),
                     ),
-                    Text(isOn ? 'Pump ON 💧' : 'Pump OFF', style: const TextStyle(color: Color(0xFF5C6A78))),
+                    Text(
+                      isOn ? 'Pump ON 💧' : 'Pump OFF',
+                      style: const TextStyle(color: Color(0xFF5C6A78)),
+                    ),
                   ],
                 ),
               ),
@@ -85,9 +97,14 @@ class _PumpControlCardState extends State<PumpControlCard> {
                     backgroundColor: const Color(0xFF2E7D32),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Turn ON', style: TextStyle(fontWeight: FontWeight.w700)),
+                  child: const Text(
+                    'Turn ON',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ),
               ),
               const SizedBox(width: 10),
@@ -98,9 +115,14 @@ class _PumpControlCardState extends State<PumpControlCard> {
                     foregroundColor: Colors.red,
                     side: const BorderSide(color: Color(0xFFFF8A80)),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: Text(loading ? 'Syncing...' : 'Turn OFF', style: const TextStyle(fontWeight: FontWeight.w700)),
+                  child: Text(
+                    loading ? 'Syncing...' : 'Turn OFF',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ),
               ),
             ],

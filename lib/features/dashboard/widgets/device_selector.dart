@@ -40,12 +40,16 @@ class DeviceSelector extends ConsumerWidget {
 
         final devices = Map<dynamic, dynamic>.from(value as Map);
         final ids = devices.keys.map((key) => key.toString()).toList();
-        final safeSelected = ids.contains(selectedDeviceId) ? selectedDeviceId : ids.first;
+        final safeSelected = ids.contains(selectedDeviceId)
+            ? selectedDeviceId
+            : ids.first;
 
         if (selectedDeviceId != safeSelected) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             ref.read(selectedDeviceIdProvider.notifier).state = safeSelected;
-            await ref.read(firebaseServiceProvider).saveSelectedDeviceId(safeSelected);
+            await ref
+                .read(firebaseServiceProvider)
+                .saveSelectedDeviceId(safeSelected);
           });
         }
 
@@ -70,7 +74,9 @@ class DeviceSelector extends ConsumerWidget {
             }
 
             ref.read(selectedDeviceIdProvider.notifier).state = deviceId;
-            await ref.read(firebaseServiceProvider).saveSelectedDeviceId(deviceId);
+            await ref
+                .read(firebaseServiceProvider)
+                .saveSelectedDeviceId(deviceId);
           },
         );
       },

@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 class LocationCard extends StatelessWidget {
   final Map location;
 
-  const LocationCard({
-    super.key,
-    required this.location,
-  });
+  const LocationCard({super.key, required this.location});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +24,10 @@ class LocationCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Device Location', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const Text(
+            'Device Location',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           const SizedBox(height: 10),
           _row('Latitude', lat),
           _row('Longitude', lng),

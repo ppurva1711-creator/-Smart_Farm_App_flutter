@@ -7,31 +7,29 @@ import '../dashboard/widgets/device_selector.dart';
 import 'widgets/valve_card.dart';
 
 class ValvesScreen extends ConsumerWidget {
-
   const ValvesScreen({super.key});
 
   @override
- Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
 
     return authState.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (error, _) => Scaffold(body: Center(child: Text(error.toString()))),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, _) =>
+          Scaffold(body: Center(child: Text(error.toString()))),
       data: (user) {
         if (user == null) {
           return const LoginScreen();
         }
 
-     final selectedDeviceId = ref.watch(selectedDeviceIdProvider);
+        final selectedDeviceId = ref.watch(selectedDeviceIdProvider);
         final dashboardAsync = ref.watch(dashboardStreamProvider);
 
-
         return Scaffold(
-
-           backgroundColor: const Color(0xFFF7F3EE),
+          backgroundColor: const Color(0xFFF7F3EE),
 
           appBar: AppBar(
-
             title: const Text('Valves Control'),
 
             centerTitle: true,
@@ -41,15 +39,15 @@ class ValvesScreen extends ConsumerWidget {
           ),
 
           body: ListView(
-
             padding: const EdgeInsets.all(16),
 
             children: [
-
               const DeviceSelector(),
               const SizedBox(height: 16),
               if (selectedDeviceId == null)
-                const Text('Select or provision a device before controlling valves.')
+                const Text(
+                  'Select or provision a device before controlling valves.',
+                )
               else
                 dashboardAsync.when(
                   data: (event) {
@@ -78,16 +76,16 @@ class ValvesScreen extends ConsumerWidget {
                       }).toList(),
                     );
                   },
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (error, _) => Text(error.toString()),
                 ),
             ],
           ),
 
-         bottomNavigationBar: const BottomNavbar(currentIndex: 1),
+          bottomNavigationBar: const BottomNavbar(currentIndex: 1),
         );
       },
-
-          );
+    );
   }
 }

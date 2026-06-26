@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SensorInfoCard extends StatelessWidget {
-
   final String title;
   final String value;
   final IconData icon;
@@ -19,10 +18,8 @@ class SensorInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Expanded(
       child: Container(
-
         padding: const EdgeInsets.all(18),
 
         decoration: BoxDecoration(
@@ -31,48 +28,34 @@ class SensorInfoCard extends StatelessWidget {
         ),
 
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
             Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: [
-
                 CircleAvatar(
-                  backgroundColor:
-                      color.withOpacity(0.15),
+                  backgroundColor: color.withOpacity(0.15),
 
-                  child: Icon(
-                    icon,
-                    color: color,
-                  ),
+                  child: Icon(icon, color: color),
                 ),
 
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 4,
                   ),
 
                   decoration: BoxDecoration(
-                    color:
-                        color.withOpacity(0.15),
+                    color: color.withOpacity(0.15),
 
-                    borderRadius:
-                        BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20),
                   ),
 
                   child: Text(
                     tag,
-                    style: TextStyle(
-                      color: color,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: color, fontSize: 12),
                   ),
                 ),
               ],
@@ -80,21 +63,13 @@ class SensorInfoCard extends StatelessWidget {
 
             const SizedBox(height: 18),
 
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.grey,
-              ),
-            ),
+            Text(title, style: const TextStyle(color: Colors.grey)),
 
             const SizedBox(height: 8),
 
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
             ),
           ],
         ),

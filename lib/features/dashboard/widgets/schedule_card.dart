@@ -5,10 +5,12 @@ import '../../../core/services/firebase_service.dart';
 
 class ScheduleCard extends StatefulWidget {
   final Map schedules;
+  final String deviceId;
 
   const ScheduleCard({
     super.key,
     required this.schedules,
+    required this.deviceId,
   });
 
   @override
@@ -22,12 +24,18 @@ class _ScheduleCardState extends State<ScheduleCard> {
   TimeOfDay? endTime;
 
   Future<void> _pickStartTime() async {
-    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
     if (picked != null) setState(() => startTime = picked);
   }
 
   Future<void> _pickEndTime() async {
-    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
     if (picked != null) setState(() => endTime = picked);
   }
 
@@ -45,21 +53,31 @@ class _ScheduleCardState extends State<ScheduleCard> {
           children: [
             ElevatedButton(
               onPressed: _pickStartTime,
-              child: Text(startTime == null ? 'Select Start Time' : startTime!.format(context)),
+              child: Text(
+                startTime == null
+                    ? 'Select Start Time'
+                    : startTime!.format(context),
+              ),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: _pickEndTime,
-              child: Text(endTime == null ? 'Select End Time' : endTime!.format(context)),
+              child: Text(
+                endTime == null ? 'Select End Time' : endTime!.format(context),
+              ),
             ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
           ElevatedButton(
             onPressed: () async {
               if (startTime == null || endTime == null) return;
               await firebaseService.addSchedule(
+                deviceId: widget.deviceId,
                 start: startTime!.format(context),
                 end: endTime!.format(context),
               );
@@ -108,10 +126,15 @@ class _ScheduleCardState extends State<ScheduleCard> {
           ),
           const SizedBox(height: 10),
           if (entries.isEmpty)
-            const Text('No schedules yet.', style: TextStyle(color: Color(0xFF6C7278))),
+            const Text(
+              'No schedules yet.',
+              style: TextStyle(color: Color(0xFF6C7278)),
+            ),
           ...entries.map((entry) {
             final scheduleId = entry.key.toString();
-            final schedule = Map<dynamic, dynamic>.from(entry.value is Map ? entry.value as Map : {});
+            final schedule = Map<dynamic, dynamic>.from(
+              entry.value is Map ? entry.value as Map : {},
+            );
             final enabled = schedule['enabled'] == true;
             final start = schedule['start']?.toString() ?? '--:--';
             final end = schedule['end']?.toString() ?? '--:--';
@@ -120,7 +143,9 @@ class _ScheduleCardState extends State<ScheduleCard> {
               margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: enabled ? const Color(0xFFF2ECFF) : const Color(0xFFF2F3F5),
+                color: enabled
+                    ? const Color(0xFFF2ECFF)
+                    : const Color(0xFFF2F3F5),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -134,14 +159,24 @@ class _ScheduleCardState extends State<ScheduleCard> {
                   Switch(
                     value: enabled,
                     onChanged: (value) async {
-                      await firebaseService.toggleSchedule(scheduleId: scheduleId, enabled: value);
+                      await firebaseService.toggleSchedule(
+                        deviceId: widget.deviceId,
+                        scheduleId: scheduleId,
+                        enabled: value,
+                      );
                     },
                   ),
                   IconButton(
                     onPressed: () async {
-                      await firebaseService.deleteSchedule(scheduleId);
+                      await firebaseService.deleteSchedule(
+                        deviceId: widget.deviceId,
+                        scheduleId: scheduleId,
+                      );
                     },
-                    icon: const Icon(Icons.delete_outline_rounded, color: Colors.red),
+                    icon: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: Colors.red,
+                    ),
                   ),
                 ],
               ),

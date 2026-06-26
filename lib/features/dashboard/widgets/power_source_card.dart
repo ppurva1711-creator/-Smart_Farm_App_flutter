@@ -13,7 +13,9 @@ class PowerSourceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSolar = powerMode.toLowerCase().contains('solar') || powerMode.toLowerCase().contains('auto');
+    final isSolar =
+        powerMode.toLowerCase().contains('solar') ||
+        powerMode.toLowerCase().contains('auto');
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -26,7 +28,11 @@ class PowerSourceCard extends StatelessWidget {
         children: [
           const Text(
             'Power Source',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF4B2E1D)),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Color(0xFF4B2E1D),
+            ),
           ),
           const SizedBox(width: 10),
           Text(
@@ -37,12 +43,18 @@ class PowerSourceCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: isSolar ? const Color(0xFF22C55E) : const Color(0xFF64748B),
+              color: isSolar
+                  ? const Color(0xFF22C55E)
+                  : const Color(0xFF64748B),
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
               '$solarPercent%',
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 11),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 11,
+              ),
             ),
           ),
         ],

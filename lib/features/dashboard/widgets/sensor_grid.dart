@@ -45,7 +45,7 @@ class SensorGrid extends StatelessWidget {
   String _waterUsedValue() {
     if (waterUsedLitres > 0) return '${waterUsedLitres.toStringAsFixed(1)}L';
     return '${currentFlowRate.toStringAsFixed(1)} L/min';
-    }
+  }
 
   String _waterUsedTag() {
     if (waterUsedLitres > 0) return 'Usage';
@@ -66,40 +66,46 @@ class SensorGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: const Color(0xFFE8D7C9)),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: accent, size: 18),
               ),
-              child: Icon(icon, color: accent, size: 18),
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.16),
-                borderRadius: BorderRadius.circular(20),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(tag, style: TextStyle(color: accent, fontSize: 10)),
               ),
-              child: Text(tag, style: TextStyle(color: accent, fontSize: 10)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Text(title, style: const TextStyle(fontSize: 12, color: Color(0xFF7A746E))),
-        const SizedBox(height: 2),
-        Text(
-          value,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 34 / 1.7,
-            color: Color(0xFF4B2E1D),
+            ],
           ),
-        ),
-      ]),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 12, color: Color(0xFF7A746E)),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 34 / 1.7,
+              color: Color(0xFF4B2E1D),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

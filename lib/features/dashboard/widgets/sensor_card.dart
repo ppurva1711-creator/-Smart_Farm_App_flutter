@@ -79,11 +79,18 @@ class SensorGrid extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(title, style: const TextStyle(fontSize: 12, color: Color(0xFF7A746E))),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 12, color: Color(0xFF7A746E)),
+          ),
           const SizedBox(height: 2),
           Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xFF4B2E1D)),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Color(0xFF4B2E1D),
+            ),
           ),
         ],
       ),

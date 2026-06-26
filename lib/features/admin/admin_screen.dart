@@ -15,8 +15,10 @@ class AdminScreen extends ConsumerWidget {
     final devices = ref.watch(allDevicesProvider);
 
     return authState.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (error, _) => Scaffold(body: Center(child: Text(error.toString()))),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, _) =>
+          Scaffold(body: Center(child: Text(error.toString()))),
       data: (user) {
         if (user == null) {
           return const LoginScreen();
@@ -56,7 +58,9 @@ class AdminScreen extends ConsumerWidget {
                   final value = event.snapshot.value;
 
                   if (value == null) {
-                    return const Center(child: Text('No devices provisioned yet.'));
+                    return const Center(
+                      child: Text('No devices provisioned yet.'),
+                    );
                   }
 
                   final data = Map<dynamic, dynamic>.from(value as Map);
@@ -64,18 +68,27 @@ class AdminScreen extends ConsumerWidget {
                   return ListView(
                     padding: const EdgeInsets.all(16),
                     children: data.entries.map((entry) {
-                      final device = Map<dynamic, dynamic>.from(entry.value as Map);
-                      final ownerUid = device['ownerUid']?.toString() ?? 'Unknown owner';
-                      final displayName = device['displayName']?.toString() ?? entry.key.toString();
+                      final device = Map<dynamic, dynamic>.from(
+                        entry.value as Map,
+                      );
+                      final ownerUid =
+                          device['ownerUid']?.toString() ?? 'Unknown owner';
+                      final displayName =
+                          device['displayName']?.toString() ??
+                          entry.key.toString();
                       final status = device['provisioning'] is Map
-                          ? Map<dynamic, dynamic>.from(device['provisioning'] as Map)['status']
+                          ? Map<dynamic, dynamic>.from(
+                              device['provisioning'] as Map,
+                            )['status']
                           : 'unknown';
 
                       return Card(
                         child: ListTile(
                           leading: const Icon(Icons.developer_board),
                           title: Text(displayName),
-                          subtitle: Text('Device: ${entry.key}\nOwner UID: $ownerUid\nStatus: $status'),
+                          subtitle: Text(
+                            'Device: ${entry.key}\nOwner UID: $ownerUid\nStatus: $status',
+                          ),
                           isThreeLine: true,
                         ),
                       );
