@@ -57,7 +57,7 @@ class DashboardScreen extends ConsumerWidget {
               ),
             ],
           ),
-          body: Container((
+          body: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
