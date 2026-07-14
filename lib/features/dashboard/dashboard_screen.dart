@@ -33,10 +33,10 @@ class DashboardScreen extends ConsumerWidget {
 
     return authState.when(
       loading: () => const Scaffold(
-         body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator()),
       ),
       error: (error, _) => Scaffold(
-         body: Center(child: Text(error.toString())),
+        body: Center(child: Text(error.toString())),
       ),
       data: (user) {
         if (user == null) {

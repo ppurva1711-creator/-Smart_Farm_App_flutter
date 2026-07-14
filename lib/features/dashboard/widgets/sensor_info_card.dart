@@ -36,7 +36,7 @@ class SensorInfoCard extends StatelessWidget {
 
               children: [
                 CircleAvatar(
-                  backgroundColor: color.withOpacity(0.15),
+                  backgroundColor: color.withValues(alpha: 0.15),
 
                   child: Icon(icon, color: color),
                 ),
@@ -48,8 +48,7 @@ class SensorInfoCard extends StatelessWidget {
                   ),
 
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.15),
-
+                    color:  color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(20),
                   ),
 
